@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import com.bazaar.util.communication.BillingSupportCommunication;
@@ -79,7 +80,12 @@ public class BroadcastIAB extends IAB {
     boolean connect(Context context, OnConnectListener listener) {
 
         try {
-            PackageInfo pInfo = context.getPackageManager().getPackageInfo(BAZAAR_PACKAGE_NAME, 0);
+            int flags = 0;
+            if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
+                flags = PackageManager.MATCH_ALL;
+            }
+            PackageInfo pInfo = context.getPackageManager().getPackageInfo(BAZAAR_PACKAGE_NAME, flags);
             int versionCode;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
                 versionCode = (int) pInfo.getLongVersionCode();

@@ -22,6 +22,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.RemoteException;
 import android.text.TextUtils;
+import android.util.Log;
+
 import com.bazaar.util.communication.BillingSupportCommunication;
 import com.bazaar.util.communication.OnConnectListener;
 import java.util.ArrayList;
@@ -120,6 +122,8 @@ public class IabHelper {
     public static final String GET_SKU_DETAILS_ITEM_LIST = "ITEM_ID_LIST";
     public static final String GET_SKU_DETAILS_ITEM_TYPE_LIST = "ITEM_TYPE_LIST";
 
+    public static final String TAG = "[BazaarAIB][Plugin]";
+
     /**
      * Creates an instance. After creation, it will not yet be ready to use. You must perform
      * setup by calling {@link #startSetup} and wait for setup to complete. This constructor does not
@@ -161,7 +165,10 @@ public class IabHelper {
          * @param result The result of the setup process.
          */
         public void onIabSetupFinished(IabResult result);
+
+        public void onServiceDisconnected();
     }
+
 
     /**
      * Starts the setup process. This will start up the setup process asynchronously.
@@ -180,8 +187,21 @@ public class IabHelper {
 
         OnConnectListener connectListener = new OnConnectListener() {
             @Override
-            public void connected(IAB iabService) {
+            public void connected(IAB iabService)
+            {
                 checkBillingSupported(listener, iabService);
+            }
+
+            @Override
+            public void disconnected(IAB iabService)
+            {
+                //dispose current connection and helper
+                if(iabConnection == iabService)
+                {
+                    dispose();
+
+                    listener.onServiceDisconnected();
+                }
             }
         };
 

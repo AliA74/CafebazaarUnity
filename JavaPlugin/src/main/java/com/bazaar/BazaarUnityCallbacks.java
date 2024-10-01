@@ -14,4 +14,6 @@ public class BazaarUnityCallbacks {
     public static final String PURCHASE_SUCCEEDED = "purchaseSucceeded";
     public static final String CONSUME_PURCHASE_FAILED = "consumePurchaseFailed";
     public static final String CONSUME_PURCHASE_SUCCEEDED = "consumePurchaseSucceeded";
+
+    public static final String SERVICE_DISCONNECTED = "serviceDisconnected";
 }

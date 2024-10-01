@@ -5,7 +5,7 @@
     <application>
         <activity
             android:name=".BazaarIABProxyActivity"
-            android:label="BazaarIAB" >
+            android:label="BazaarIAB" android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

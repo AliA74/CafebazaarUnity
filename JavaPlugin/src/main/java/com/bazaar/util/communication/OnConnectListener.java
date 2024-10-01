@@ -4,4 +4,6 @@ import com.bazaar.util.IAB;
 
 public interface OnConnectListener {
     void connected(IAB iabService);
+
+    void disconnected(IAB iabService);
 }

@@ -83,6 +83,12 @@ public class BazaarIABPlugin extends BazaarIABPluginBase
 					mHelper = null;
 				}
 			}
+
+			public void onServiceDisconnected()
+			{
+				//inform Unity about service disconnect, client should reconnect again
+				UnitySendMessage(BazaarUnityCallbacks.SERVICE_DISCONNECTED, "");
+			}
 		});
 	}
 	

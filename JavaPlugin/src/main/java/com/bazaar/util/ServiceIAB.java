@@ -9,6 +9,7 @@ import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -59,13 +60,14 @@ public class ServiceIAB extends IAB {
             @Override
             public void onServiceDisconnected(ComponentName name) {
                 logger.logDebug("Billing service disconnected.");
-                mService = null;
+                listener.disconnected(myIabService);
             }
 
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 logger.logDebug("Billing service connected.");
-                if (disposed()) {
+                if (disposed())
+                {
                     return;
                 }
                 mSetupDone = true;
@@ -78,8 +80,13 @@ public class ServiceIAB extends IAB {
         Intent serviceIntent = new Intent("ir.cafebazaar.pardakht.InAppBillingService.BIND");
         serviceIntent.setPackage(BAZAAR_PACKAGE_NAME);
 
+        int flags = 0;
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            flags = PackageManager.MATCH_ALL;
+        }
         PackageManager pm = context.getPackageManager();
-        List<ResolveInfo> intentServices = pm.queryIntentServices(serviceIntent, 0);
+        List<ResolveInfo> intentServices = pm.queryIntentServices(serviceIntent, flags);
         if (!intentServices.isEmpty()) {
             // service available to handle that Intent
             return context.bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
