@@ -5,12 +5,20 @@
     <application>
         <activity
             android:name=".BazaarIABProxyActivity"
-            android:label="BazaarIAB" android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:label="BazaarIAB" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
         </activity>
     </application>
+
+    <queries>
+        <package android:name="com.farsitel.bazaar" />
+
+        <intent>
+            <action android:name="ir.cafebazaar.pardakht.InAppBillingService.BIND" />
+        </intent>
+    </queries>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR" />
+
+    <meta-data android:name="billing.service" android:value="bazaar.BazaarIabService" />
 </manifest>
