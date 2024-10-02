@@ -24,6 +24,7 @@ public class BazaarIABEventListener : MonoBehaviour
 		IABEventManager.purchaseFailedEvent += purchaseFailedEvent;
 		IABEventManager.consumePurchaseSucceededEvent += consumePurchaseSucceededEvent;
 		IABEventManager.consumePurchaseFailedEvent += consumePurchaseFailedEvent;
+		IABEventManager.serviceDisconnectedEvent += serviceDisconnectedEvent;
 	}
 
     
@@ -43,6 +44,7 @@ public class BazaarIABEventListener : MonoBehaviour
 		IABEventManager.purchaseFailedEvent -= purchaseFailedEvent;
 		IABEventManager.consumePurchaseSucceededEvent -= consumePurchaseSucceededEvent;
 		IABEventManager.consumePurchaseFailedEvent -= consumePurchaseFailedEvent;
+		IABEventManager.serviceDisconnectedEvent -= serviceDisconnectedEvent;
 	}
 
 
@@ -126,6 +128,18 @@ public class BazaarIABEventListener : MonoBehaviour
 	void consumePurchaseFailedEvent(string error)
 	{
 		Debug.Log("consumePurchaseFailedEvent: " + error);
+	}
+
+	private async void serviceDisconnectedEvent()
+	{
+		Debug.LogError("[BazaarIAB] OnServiceDisconnected");
+		//disponse currenct helper as it is no longer valid to use
+		BazaarIAB.unbindService();
+
+		//wait a little to retry service connection (Needed ?)
+		await Task.Delay(1000);
+
+		//TODO: Call BazaarIAB.init again to restore service connection
 	}
 
 #endif

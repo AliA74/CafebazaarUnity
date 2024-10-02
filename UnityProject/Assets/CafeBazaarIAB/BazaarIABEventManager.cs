@@ -46,6 +46,8 @@ namespace BazaarPlugin
         // Fired when a call to consume a product fails
         public static event Action<string> consumePurchaseFailedEvent;
 
+        // Fired when service connection to bazaar disconnected, should dispose current connection ( by calling BazaarIAB.unbindService() ) and create a new one later ( calling BazaarIAB.init again )
+        public static event Action serviceDisconnectedEvent;
 
         static IABEventManager()
         {
@@ -137,7 +139,11 @@ namespace BazaarPlugin
         {
             consumePurchaseFailedEvent.SafeInvoke(error);
         }
-
+        
+        public void serviceDisconnected(string _)
+        {
+            serviceDisconnectedEvent.SafeInvoke();
+        }
     }
 }
 
