@@ -6,7 +6,7 @@ Cafebazaar In-app purchase Unity plugin
 
 
 ## BUILD INSTRUCTION
-To build `BazaarIAB.jar` from the java source code:
+To build `BazaarIAB.aar` from the java source code:
 1. Open a command prompt
 2. Navigate to JavaPlugin folder
 3. Type `gradlew createJar`
@@ -24,26 +24,8 @@ There is `IABEventManager` class that you can subscribe to all plugin events.
 
 After you find out that the billing is supported, you can call `queryInventory` by providing all of your available skus. When the `queryInventorySucceededEvent` fires it will contain a list of all the current purchases, subscriptions and a list of all your project sku details. You can use this information to setup your store. The list is also handy when you want to consume a purchase. Any `BazaarPurchases` returned are available for consumption.
 
-Add the plugin activity in the Application section of the `AndroidManifest.xml`:
-
-	<meta-data android:name="billing.service" android:value="bazaar.BazaarIabService" />
-	<activity android:name="com.bazaar.BazaarIABProxyActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
-	
-Also add the required permissions to your manifest:
-
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR" />
-	
-### Targeting API Level 30 or higher
-If you are targeting Android API Level 30 (Android 11) or higher, you need to add the following to the manifest:
-
-	<queries>
-	    <package android:name="com.farsitel.bazaar" />
-
-	    <intent>
-	      <action android:name="ir.cafebazaar.pardakht.InAppBillingService.BIND" />
-	    </intent>
-	</queries>
+## Modifications to AndroidManifest
+With version 1.1.0, the library uses AAR file instead of Jar file. No need for manual AndroidManigest modifications anymore 🍻
 
 # Methods	
 Methods are inside `BazaarIAB` class.
@@ -116,6 +98,8 @@ public static event Action<BazaarPurchase> consumePurchaseSucceededEvent;
 // Fired when a call to consume a product fails
 public static event Action<string> consumePurchaseFailedEvent;
 
+// Fired when service connection to bazaar disconnected, should dispose current connection ( by calling BazaarIAB.unbindService() ) and create a new one later ( calling BazaarIAB.init again )
+public static event Action serviceDisconnectedEvent;
 ```
 
 # Thanks
